@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1415376178 source:/home/tevenfeng/Code/C++/pThread_pi/main.c
+	<stdio.h>
+	<pthread.h>
+	<math.h>
+	<time.h>
+	<sys/time.h>
+
