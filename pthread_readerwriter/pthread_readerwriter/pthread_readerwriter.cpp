@@ -23,6 +23,7 @@ const int MAX_NUM = 100;
 int readercount = 0;
 semaphore rmutex,db;
 
+//用于传入线程编号的参数
 class myPara
 {
 public:
@@ -34,6 +35,7 @@ DWORD WINAPI Reader(LPVOID para)
 	myPara *p = (myPara*)para;
 	int i = p->i;                        //第i个reader
 	printf("线程号为%d的读者线程到达。", i);
+
 	//while (TRUE)
 	{
 		P(rmutex);
@@ -80,7 +82,7 @@ int main()
 
 	printf("………………………………………程序开始………………………………………\n");
 
-	myPara* mypara[threadcount * 2];
+	myPara* mypara[threadcount * 2];						//用于传入线程编号的参数
 	for (int i = 0; i < threadcount; i++)
 	{
 		mypara[i] = new myPara();
@@ -92,13 +94,15 @@ int main()
 		hThread[i + threadcount] = CreateThread(NULL, 0, Writer, mypara[i + threadcount], NULL, NULL);
 	}
 
+	//等待线程结束
 	for (int i = 0; i < threadcount; i++)
 	{
 		WaitForSingleObject(hThread[i],INFINITE);
 		WaitForSingleObject(hThread[i + threadcount], INFINITE);
 	}
 
-
+	CloseHandle(rmutex);
+	CloseHandle(db);
 
 	system("pause");
 }
