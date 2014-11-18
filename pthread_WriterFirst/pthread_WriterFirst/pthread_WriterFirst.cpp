@@ -30,7 +30,7 @@ public:
 	int i;
 };
 
-HANDLE WINAPI Reader(LPVOID para)
+DWORD WINAPI Reader(LPVOID para)
 {
 	//第i个reader
 	Para *myPara = (Para*)para;
@@ -46,7 +46,7 @@ HANDLE WINAPI Reader(LPVOID para)
 		V(rmutex);
 		V(wpmutex);
 
-		printf("当前是线程号为%d的读者线程在操作数据库。\n",i);
+		printf("当前进入的是线程号为%d的读者线程。共有%d个读者线程在操作数据库。\n",i,readercount);
 
 		P(rmutex);
 		readercount--;
@@ -57,13 +57,13 @@ HANDLE WINAPI Reader(LPVOID para)
 	return 0;
 }
 
-HANDLE WINAPI Writer(LPVOID para)
+DWORD WINAPI Writer(LPVOID para)
 {
 	Para *myPara = (Para*)para;
 	int i = myPara->i;
 	printf("线程号为%d的写者线程到达。",i);
 
-	while (TRUE)
+	//while (TRUE)
 	{
 		P(wpmutex);
 		P(wmutex)
@@ -79,17 +79,47 @@ HANDLE WINAPI Writer(LPVOID para)
 		V(wmutex);
 		V(wpmutex);
 	}
+	return 0;
 }
 
 int main()
 {
+	HANDLE hThread[2 * MAX_NUM];			//线程句柄
+	const int threadcount = 5;					//实例化的读者线程数
+
 	//初始化信号量
 	rmutex = CreateSemaphore(NULL, 1, 1, (LPCWSTR)"Reader'sMutex");
 	wmutex = CreateSemaphore(NULL, 1, 1, (LPCWSTR)"Writer'sMutex");
 	wpmutex = CreateSemaphore(NULL, 1, 1, (LPCWSTR)"WriterFirstMark");
 	db = CreateSemaphore(NULL, 1, 1, (LPCWSTR)"Database'sMutex");
 
+	printf("……………………………………程序开始……………………………………\n");
 
+	//参数列表实例化
+	Para* mypara[threadcount * 2];
+	for (int i = 0; i < threadcount; i++)
+	{
+		mypara[i] = new Para();
+		mypara[i]->i = i;
+		mypara[i + threadcount] = new Para();
+		mypara[i + threadcount]->i = i + threadcount;
+	}
+
+	for (int i = 0; i < threadcount; i++)
+	{
+		hThread[i] = CreateThread(NULL, 0, Reader, mypara[i], NULL, NULL);
+		hThread[i + threadcount] = CreateThread(NULL, 0, Writer, mypara[i + threadcount], NULL, NULL);
+	}
+
+	for (int i = 0; i < threadcount; i++)
+	{
+		WaitForSingleObject(hThread[i],INFINITE);
+		WaitForSingleObject(hThread[i + threadcount], INFINITE);
+	}
+
+	CloseHandle(rmutex);
+	CloseHandle(wpmutex);
+	CloseHandle(wmutex);
 
 	system("pause");
 }
