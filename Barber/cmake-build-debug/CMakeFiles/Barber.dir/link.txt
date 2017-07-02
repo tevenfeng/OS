@@ -1,0 +1,1 @@
+/usr/bin/cc  -g   CMakeFiles/Barber.dir/main.c.o  -o Barber -lpthread 

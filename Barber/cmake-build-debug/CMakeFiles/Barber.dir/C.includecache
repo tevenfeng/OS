@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/fengdingwen/Coding/C/LinuxProgramming/Barber/main.c
+stdio.h
+-
+pthread.h
+-
+semaphore.h
+-
+memory.h
+-
+stdlib.h
+-
+unistd.h
+-
+
