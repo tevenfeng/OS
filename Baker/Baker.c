@@ -10,6 +10,7 @@ int main()
 {
     const int NUM_OF_BAKER = 3;
     int i = 0;
+    
     //模拟三个销售人员
     pthread_t bakerThread[NUM_OF_BAKER];
 
@@ -27,11 +28,11 @@ int main()
 void *bakerFunction(void *arg)
 {
     int sid = semaphore_create();
-    up_num_of_free(sid);
+    vNumOfFree(sid);
     while (1)
     {
         int tid = (int)arg;
-        down_num_of_waiting(sid); //没有顾客则会阻塞
+        pNumOfWaiting(sid); //没有顾客则会阻塞
         printf("销售人员 %d ：有顾客在排队等候，我去为他服务。\n", tid);
         sleep(3);
     }

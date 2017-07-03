@@ -11,8 +11,7 @@ union semun {
 };
 
 int semaphore_create();
-int output_semaphore(int sid);
-int up_num_of_waiting(int sid);
-int down_num_of_waiting(int sid);
-int up_num_of_free(int sid);
-int down_num_of_free(int sid);
+int vNumOfWaiting(int sid);
+int pNumOfWaiting(int sid);
+int vNumOfFree(int sid);
+int pNumOfFree(int sid);
