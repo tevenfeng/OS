@@ -35,5 +35,6 @@ void *bakerFunction(void *arg)
         pNumOfWaiting(sid); //没有顾客则会阻塞
         printf("销售人员 %d ：有顾客在排队等候，我去为他服务。\n", tid);
         sleep(3);
+        vNumOfFree(sid);
     }
 }

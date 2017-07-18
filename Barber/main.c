@@ -20,9 +20,9 @@ int main() {
 
     pthread_t customerThread[20], barberThread;
 
-    sem_init(&mutex, 0, 1);  //互斥信号量初始化1
-    sem_init(&customers, 0, 0);//顾客信号量初始化0
-    sem_init(&barber, 0, 1);//理发师信号量初始化1
+    sem_init(&mutex, 0, 1);
+    sem_init(&customers, 0, 0);
+    sem_init(&barber, 0, 1);
 
     int i = 20;
     pthread_create(&barberThread, NULL, (void *) barberFunction, NULL);

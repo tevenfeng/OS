@@ -35,5 +35,4 @@ void *customerFunction(void *arg) {
     printf("一个销售人员空闲，为 %d 号顾客服务中。\n", tid);
     sleep(3);
     printf("%d 号顾客服务结束,已离开。\n", tid);
-    vNumOfFree(sid);
 }
